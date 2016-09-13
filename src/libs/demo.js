@@ -221,7 +221,7 @@ function string2ArrayBuffer (string) {
     boundaryString = [
       '--' + boundary,
       'Content-Disposition: form-data; name="file"; filename="' + file.name || 'blob' + '"',
-      'Content-Type: ' + 'image/' + contentType,
+      'Content-Type: ' + contentType,
       '', binaryString,
       '--' + boundary + '--', ''
     ].join('\r\n')
