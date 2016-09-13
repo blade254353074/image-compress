@@ -189,13 +189,13 @@ function string2ArrayBuffer (string) {
 
     J_MimeType.innerText = mimeType
     J_CompressedImageDataURL.innerText = compressedImageDataURL
+    J_SourceFileSize.innerText = file.size
+    J_CompressedFileSize.innerText = compressedBlob.size
     J_Atob.removeAttribute('disabled')
-
+    
     if (compressedBlob.size > file.size) {
       // 文件压缩后，比原文件大
-      J_SourceFileSize.innerText = file.size
-      J_CompressedFileSize.innerText = compressedBlob.size
-
+      console.log(compressedBlob.size + ' > '  + file.size)
       return
     }
     compressSuccess = true
