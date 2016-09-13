@@ -3,7 +3,7 @@
 
 # Quick Look 
 
-[https://blade254353074.github.io/image-compress/src/](https://blade254353074.github.io/image-compress/)
+[https://blade254353074.github.io/image-compress/](https://blade254353074.github.io/image-compress/)
 
 # How to start
 
