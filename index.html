@@ -12,13 +12,14 @@
   <div class="container">
     <h1>浏览器端图片压缩步骤</h1>
     <section>
-      <h3>1. 获取 input[type="file"][accept="image/png,image/jpg,image/jpeg,image/gif,image/bmp"] 控件上的图像文件对象;</h3>
-      <input id="J_File" type="file" accept="image/png,image/jpg,image/jpeg,image/gif,image/bmp" capture="camera"></section>
+      <h3>1. 获取 input[type="file"][accept="image/*"] 控件上的图像文件对象;</h3>
+      <input id="J_File" type="file" accept="image/*" capture="camera">
       <div style="margin-top: 10px">
         <span>object File: </span>
         <p id="J_ImageObject" class="single-line"></p>
       </div>
       <button id="J_GetImageFile" disabled>GetImageFile</button>
+    </section>
     <section>
       <h3>2. 使用 window.URL/Blob/FileReader 获取图像路径（DataURL/window.URL）并通过 Image 对象载入;</h3>
       <img id="J_Image">

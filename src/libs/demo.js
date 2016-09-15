@@ -113,11 +113,13 @@ function string2ArrayBuffer (string) {
 
   // get file
   J_GetImageFile.addEventListener('click', function () {
+    var name
     file = J_File.files[0]
-    fileType = file.type || 'image/' + name.substr(name.lastIndexOf('.') + 1)
+    fileName = file.name
+    fileType = file.type || 'image/' + fileName.substr(fileName.lastIndexOf('.') + 1)
     J_ImageObject.innerText = [
-      'file.name: ' + file.name,
-      'file.type: ' + file.type,
+      'file.name: ' + fileName,
+      'file.type: ' + fileType,
       'file.size: ' + file.size
     ].join('\r\n')
     J_LoadImageByURL.removeAttribute('disabled')
