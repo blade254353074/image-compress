@@ -152,11 +152,11 @@ function string2ArrayBuffer (string) {
     var fileReader = new FileReader()
 
     J_Image.removeAttribute('src')
-    fileReader.addEventListener('load', function (e) {
+    fileReader.onload = function (e) {
       var dataURL = e.target.result
       J_Image.src = dataURL
       J_ImageURL.innerText = dataURL
-    })
+    }
     fileReader.readAsDataURL(file)
   })
 
