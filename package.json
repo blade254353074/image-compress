@@ -4,7 +4,7 @@
   "description": "Browser side image compress & upload example, Android 4.0 compatible.",
   "main": "index.js",
   "scripts": {
-    "start": "browser-sync start -s --port 8080 -f \".\" --no-ui",
+    "start": "browser-sync start -s --port 8080 -f \"./src,.index.html\" --no-ui",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["image", "compress", "BrowserSide", "Android4.0"],
