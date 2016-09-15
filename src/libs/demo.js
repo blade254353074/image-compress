@@ -5,9 +5,9 @@ function $ (selector) {
 window.URL = window.URL || window.webkitURL
 
 function newBlob (data, datatype) {
-  var out
+  var blob
   try {
-    out = new Blob([data], { type: datatype })
+    blob = new Blob([data], { type: datatype })
   } catch (e) {
     window.BlobBuilder = window.BlobBuilder ||
     window.WebKitBlobBuilder ||
@@ -15,14 +15,14 @@ function newBlob (data, datatype) {
     window.MSBlobBuilder
 
     if (e.name == 'TypeError' && window.BlobBuilder) {
-      var bb = new BlobBuilder()
-      bb.append(data)
-      out = bb.getBlob(datatype)
+      var blobBuilder = new BlobBuilder()
+      blobBuilder.append(data)
+      blob = blobBuilder.getBlob(datatype)
     } else if (e.name == 'InvalidStateError') {
-      out = new Blob([data], { type: datatype })
+      blob = new Blob([data], { type: datatype })
     }
   }
-  return out
+  return blob
 }
 
 function isCanvasBlank (canvas) {
@@ -220,7 +220,7 @@ function string2ArrayBuffer (string) {
     var boundary = 'customFileboundary'
     boundaryString = [
       '--' + boundary,
-      'Content-Disposition: form-data; name="file"; filename="' + file.name || 'blob' + '"',
+      'Content-Disposition: form-data; name="file"; filename="' + (file.name || 'blob') + '"',
       'Content-Type: ' + contentType,
       '', binaryString,
       '--' + boundary + '--', ''
