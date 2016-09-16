@@ -175,11 +175,20 @@
   
   function sendArrayBuffer (url) {
     return function () {
+      var button = this
+      var buttonText = this.innerText
       var xhr = new XMLHttpRequest()
       xhr.withCredentials = true
       xhr.open('POST', url, true)
       xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary)
 
+      xhr.upload.addEventListener('progress', function (e) {
+        var progress
+        if (e.lengthComputable) {
+          progress = (e.loaded / e.total * 100).toFixed(2)
+          button.innerText = progress + '%'
+        }
+      })
       xhr.addEventListener('load', function () {
         if (
           xhr.status >= 200 && xhr.status < 300 ||
@@ -190,26 +199,39 @@
           J_UploadResult_XHR.innerText =
             '--- ERROR: ' + xhr.status + ' ---\n' + JSON.stringify(JSON.parse(xhr.responseText), null, 2)
         }
+        button.innerText = buttonText
+        button.removeAttribute('disabled')
       })
 
+      button.setAttribute('disabled', 'true')
       xhr.send(arrayBuffer)
     }
   }
 
   // use XMLHttpRequest send Array Buffer
-  J_XHRMultiparty.addEventListener('click', sendArrayBuffer('http://localhost:8080/api/upload/multiparty'))
-  J_XHRMulter.addEventListener('click', sendArrayBuffer('http://localhost:8080/api/upload/multer'))
+  J_XHRMultiparty.addEventListener('click', sendArrayBuffer('/api/upload/multiparty'))
+  J_XHRMulter.addEventListener('click', sendArrayBuffer('/api/upload/multer'))
 
   function sendBlob (url) {
     return function () {
-      var fd = new FormData()
+      var button = this
+      var buttonText = this.innerText
+      var formData = new FormData()
       var xhr = new XMLHttpRequest()
       var blobFile = dataURL2Blob(compressedImageDataURL)
 
-      fd.append('file', blobFile, file.name)
+      formData.append('file', blobFile, file.name)
 
       xhr.open('POST', url, true)
       xhr.withCredentials = true
+
+      xhr.upload.addEventListener('progress', function (e) {
+        var progress
+        if (e.lengthComputable) {
+          progress = (e.loaded / e.total * 100).toFixed(2)
+          button.innerText = progress + '%'
+        }
+      })
       xhr.addEventListener('load', function () {
         if (
           xhr.status >= 200 && xhr.status < 300 ||
@@ -220,12 +242,16 @@
           J_UploadResult_XHRBlob.innerText =
             '--- ERROR: ' + xhr.status + ' ---\n' + JSON.stringify(JSON.parse(xhr.responseText), null, 2)
         }
+        button.innerText = buttonText
+        button.removeAttribute('disabled')
       })
-      xhr.send(fd)
+      
+      button.setAttribute('disabled', 'true')
+      xhr.send(formData)
     }
   }
 
   // use XMLHttpRequest & FormData send blob
-  J_XHRBlobMultiparty.addEventListener('click', sendBlob('http://localhost:8080/api/upload/multiparty'))
-  J_XHRBlobMulter.addEventListener('click', sendBlob('http://localhost:8080/api/upload/multer'))
+  J_XHRBlobMultiparty.addEventListener('click', sendBlob('/api/upload/multiparty'))
+  J_XHRBlobMulter.addEventListener('click', sendBlob('/api/upload/multer'))
 }())

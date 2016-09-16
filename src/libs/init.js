@@ -87,6 +87,5 @@ function string2ArrayBuffer (string) {
   var bytes = Array.prototype.map.call(string, function (c) {
     return c.charCodeAt(0) & 0xff
   })
-  console.log(bytes)
   return new Uint8Array(bytes).buffer
 }

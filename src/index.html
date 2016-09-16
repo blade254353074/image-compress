@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="renderer" content="webkit">
-  <title>Image Compressed Demo</title>
+  <title>Browser side image compression demo</title>
   <link rel="stylesheet" href="./libs/demo.css">
 </head>
 <body>
   <div class="container">
-    <h1>浏览器端图片压缩步骤</h1>
+    <h1>Browser side image compression steps show case:</h1>
     <section>
-      <h3>1. 获取 input[type="file"][accept="image/*"] 控件上的图像文件对象;</h3>
+      <h3>1. Get file object from input[type="file"][accept="image/*"] control.</h3>
       <input id="J_File" type="file" accept="image/*" capture="camera">
       <div style="margin-top: 10px">
         <span>object File: </span>
@@ -21,7 +21,7 @@
       <button id="J_GetImageFile" disabled>GetImageFile</button>
     </section>
     <section>
-      <h3>2. 使用 window.URL/Blob/FileReader 获取图像路径（DataURL/window.URL）并通过 Image 对象载入;</h3>
+      <h3>2. Use window.URL/FileReader to get image url(DataURL/window.URL), and load by Image DOM object.</h3>
       <img id="J_Image">
       <div>
         <span>dataURL/BlobURL: </span>
@@ -31,12 +31,12 @@
       <button id="J_LoadImageByFileReader" disabled>FileReader</button>
     </section>
     <section>
-      <h3>3. 通过载入图像的 Image 对象绘制到 canvas 画布上;</h3>
+      <h3>3. Draw Image to the canvas.</h3>
       <canvas id="J_ImageCanvas"></canvas><br>
       <button id="J_DrawImage" disabled>DrawImageToCanvas</button>
     </section>
     <section>
-      <h3>4. 通过 canvas.toDataURL 方法将画布图像压缩并输出为 base-64 编码的 dataURL 字符串;</h3>
+      <h3>4. Use canvas.toDataURL to compress the image, and export the base-64 encode dataURL string.</h3>
       <div>
         <span>mimeType: </span>
         <p id="J_MimeType" class="single-line"></p>
@@ -50,7 +50,7 @@
       </div>
     </section>
     <section>
-      <h3>5. 通过 window.atob 将 base-64 字符串解码为 binaryString（二进制文本）;</h3>
+      <h3>5. Decode the base-64 string to binaryString by using window.atob.</h3>
       <div>
         <span>Base64-ContentType: </span>
         <p id="J_ContentType" class="single-line"></p>
@@ -62,7 +62,7 @@
       </div>
     </section>
     <section>
-      <h3>6. 将二进制文本拼接构造为 multipart/form-data 格式；</h3>
+      <h3>6. Concat the binaryString to multipart format string.</h3>
       <div>
         <span>multipart/form-data binaryString: </span>
         <pre id="J_MultipartBinaryString"></pre>
@@ -70,34 +70,40 @@
       </div>
     </section>
     <section>
-      <h3>7. 将 multipart 格式的二进制文本转换为 Uint8Array 二进制数据 Array Buffer；</h3>
+      <h3>7. Convert the multipart format string to ArrayBuffer by using Uint8Array.</h3>
       <div>
         <span>Uint8Array Buffer: </span>
         <p id="J_ArrayBuffer" class="single-line"></p>
         <button id="J_String2ArrayBuffer" disabled>String to ArrayBuffer</button>
       </div>
     </section>
+    <hr>
     <section>
-      <h3>0x01. 用 XMLHttpRequest 发送 ArrayBuffer。</h3>
+      <p>
+        Notice: If you want to upload file to the server.<br>
+        Please try to start with the local server to test.<br>
+        <a href="https://github.com/blade254353074/image-compress" target="_blank" rel="noopener noreferrer">https://github.com/blade254353074/image-compress</a>
+      </p>
+      <h3>0x01. Send the arrayBuffer by XMLHttpRequest.(After step 7)</h3>
       <p id="J_UploadResult_XHR"></p>
       <button id="J_XHRMultiparty" disabled>Send to multiparty</button>
       <button id="J_XHRMulter" disabled>Send to multer</button>
     </section>
     <section>
-      <h3>0x02. 用 XMLHttpRequest + FormData 发送 Blob。</h3>
+      <h3>0x02. Send the blob by XMLHttpRequest and FormData.(After step 4)</h3>
       <p id="J_UploadResult_XHRBlob"></p>
       <button id="J_XHRBlobMultiparty" disabled>Send to multiparty</button>
       <button id="J_XHRBlobMulter" disabled>Send to multer</button>
     </section>
     </section>
     <section>
-      <h3>0x03. Form 表单提交</h3>
+      <h3>0x03. Use form to upload file.(For the comparison)</h3>
       <iframe name="uploadFrame" style="width: 100%" frameborder="0"></iframe>
-      <form id="multipartyForm" target="uploadFrame" action="http://localhost:8080/api/upload/multiparty" method="POST" enctype="multipart/form-data">
+      <form id="multipartyForm" target="uploadFrame" action="/api/upload/multiparty" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" accept="image/*" capture="camera">
         <input type="submit" value="multipartyForm">
       </form>
-      <form id="multerForm" target="uploadFrame" action="http://localhost:8080/api/upload/multer" method="POST" enctype="multipart/form-data">
+      <form id="multerForm" target="uploadFrame" action="/api/upload/multer" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" accept="image/*" capture="camera">
         <input type="submit" value="multerForm">
       </form>

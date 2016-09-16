@@ -70,7 +70,7 @@
       </div>
     </section>
     <section>
-      <h3>7. 将 multipart 格式的二进制文本转换为 Uint8Array 二进制数据 Buffer；</h3>
+      <h3>7. 将 multipart 格式的二进制文本转换为 Uint8Array 二进制数据 Array Buffer；</h3>
       <div>
         <span>Uint8Array Buffer: </span>
         <p id="J_ArrayBuffer" class="single-line"></p>
@@ -78,9 +78,32 @@
       </div>
     </section>
     <section>
-      <h3>8. 用 XMLHttpRequest 对象的非标准方法 sendAsBinary 发送二进制数据 Buffer。</h3>
+      <h3>0x01. 用 XMLHttpRequest 发送 ArrayBuffer。</h3>
+      <p id="J_UploadResult_XHR"></p>
+      <button id="J_XHRMultiparty" disabled>Send to multiparty</button>
+      <button id="J_XHRMulter" disabled>Send to multer</button>
+    </section>
+    <section>
+      <h3>0x02. 用 XMLHttpRequest + FormData 发送 Blob。</h3>
+      <p id="J_UploadResult_XHRBlob"></p>
+      <button id="J_XHRBlobMultiparty" disabled>Send to multiparty</button>
+      <button id="J_XHRBlobMulter" disabled>Send to multer</button>
+    </section>
+    </section>
+    <section>
+      <h3>0x03. Form 表单提交</h3>
+      <iframe name="uploadFrame" style="width: 100%" frameborder="0"></iframe>
+      <form id="multipartyForm" target="uploadFrame" action="http://localhost:8080/api/upload/multiparty" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" capture="camera">
+        <input type="submit" value="multipartyForm">
+      </form>
+      <form id="multerForm" target="uploadFrame" action="http://localhost:8080/api/upload/multer" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" capture="camera">
+        <input type="submit" value="multerForm">
+      </form>
     </section>
   </div>
+  <script src="src/libs/init.js"></script>
   <script src="src/libs/demo.js"></script>
 </body>
 </html>

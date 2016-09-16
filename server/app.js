@@ -1,5 +1,5 @@
 var bodyParser = require('body-parser')
-// var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser')
 var cors = require('cors')
 var express = require('express')
 var log4js = require('log4js')
@@ -12,9 +12,8 @@ var app = express()
 app.use(httpLogger)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-// app.use(cookieParser())
+app.use(cookieParser())
 app.use(cors({
-  // origin: 'http://localhost:8080',
   origin: function (origin, callback) {
     callback(null, true)
   },
