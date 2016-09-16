@@ -39,7 +39,7 @@
     } else {
       J_GetImageFile.setAttribute('disabled', true)
     }
-    autoClick()
+    // autoClick() // Test
   })
 
   // get file
@@ -129,7 +129,7 @@
     J_XHRBlobMulter.removeAttribute('disabled')
 
     if (compressedBlob.size > file.size) {
-      // 文件压缩后，比原文件大
+      // Compressed file size > Original file size
       console.log(compressedBlob.size + ' > ' + file.size)
       return
     }

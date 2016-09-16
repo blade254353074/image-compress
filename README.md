@@ -51,3 +51,5 @@ And, I use [expressjs/cors](https://github.com/expressjs/cors) to make sure all 
 * [multipart/form-data](https://tools.ietf.org/html/rfc7578) 
 * FormData
 * XMLHttpRequest
+
+For details to see the article at [https://sebastianblade.com/browser-side-image-compress-and-upload/](https://sebastianblade.com/browser-side-image-compress-and-upload/).
