@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <title>Image Compressed Demo</title>
+  <link rel="stylesheet" href="./libs/demo.css">
+</head>
+<body>
+  <div class="container">
+    <h1>浏览器端图片压缩步骤</h1>
+    <section>
+      <h3>1. 获取 input[type="file"][accept="image/*"] 控件上的图像文件对象;</h3>
+      <input id="J_File" type="file" accept="image/*" capture="camera">
+      <div style="margin-top: 10px">
+        <span>object File: </span>
+        <p id="J_ImageObject" class="single-line"></p>
+      </div>
+      <button id="J_GetImageFile" disabled>GetImageFile</button>
+    </section>
+    <section>
+      <h3>2. 使用 window.URL/Blob/FileReader 获取图像路径（DataURL/window.URL）并通过 Image 对象载入;</h3>
+      <img id="J_Image">
+      <div>
+        <span>dataURL/BlobURL: </span>
+        <p id="J_ImageURL" class="single-line"></p>
+      </div>
+      <button id="J_LoadImageByURL" disabled>URL</button>
+      <button id="J_LoadImageByFileReader" disabled>FileReader</button>
+    </section>
+    <section>
+      <h3>3. 通过载入图像的 Image 对象绘制到 canvas 画布上;</h3>
+      <canvas id="J_ImageCanvas"></canvas><br>
+      <button id="J_DrawImage" disabled>DrawImageToCanvas</button>
+    </section>
+    <section>
+      <h3>4. 通过 canvas.toDataURL 方法将画布图像压缩并输出为 base-64 编码的 dataURL 字符串;</h3>
+      <div>
+        <span>mimeType: </span>
+        <p id="J_MimeType" class="single-line"></p>
+        <span>sourceFileSize: </span>
+        <p id="J_SourceFileSize" class="single-line"></p>
+        <span>CompressedFileSize: </span>
+        <p id="J_CompressedFileSize" class="single-line"></p>
+        <span>dataURL: </span>
+        <p id="J_CompressedImageDataURL" class="single-line"></p>
+        <button id="J_CompressImage" disabled>CompressImage(quality: 30%)</button>
+      </div>
+    </section>
+    <section>
+      <h3>5. 通过 window.atob 将 base-64 字符串解码为 binaryString（二进制文本）;</h3>
+      <div>
+        <span>Base64-ContentType: </span>
+        <p id="J_ContentType" class="single-line"></p>
+        <span>pureBase64Data: </span>
+        <p id="J_PureBase64Data" class="single-line"></p>
+        <span>binaryString: </span>
+        <pre id="J_BinaryString"></pre>
+        <button id="J_Atob" disabled>AtobDecode</button>
+      </div>
+    </section>
+    <section>
+      <h3>6. 将二进制文本拼接构造为 multipart/form-data 格式；</h3>
+      <div>
+        <span>multipart/form-data binaryString: </span>
+        <pre id="J_MultipartBinaryString"></pre>
+        <button id="J_ConcatBinaryStirng" disabled>ConcatBinaryStirng</button>
+      </div>
+    </section>
+    <section>
+      <h3>7. 将 multipart 格式的二进制文本转换为 Uint8Array 二进制数据 Array Buffer；</h3>
+      <div>
+        <span>Uint8Array Buffer: </span>
+        <p id="J_ArrayBuffer" class="single-line"></p>
+        <button id="J_String2ArrayBuffer" disabled>String to ArrayBuffer</button>
+      </div>
+    </section>
+    <section>
+      <h3>0x01. 用 XMLHttpRequest 对象发送 ArrayBuffer。</h3>
+      <div id="J_UploadResult_XHR"></div>
+      <button id="J_XHR" disabled>Send</button>
+    </section>
+    <section>
+      <h3>0x02. 用 XMLHttpRequest + FormData 发送 Blob。</h3>
+      <div id="J_UploadResult_XHRBlob"></div>
+      <button id="J_XHRBlob" disabled>Send</button>
+    </section>
+    </section>
+    <section>
+      <h3>0x03. Form 表单提交</h3>
+      <iframe name="uploadFrame" style="width: 100%" frameborder="0"></iframe>
+      <form id="multipartyForm" target="uploadFrame" action="http://localhost:8080/api/upload/multiparty" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" capture="camera">
+        <input type="submit" value="multipartyForm">
+      </form>
+      <form id="multerForm" target="uploadFrame" action="http://localhost:8080/api/upload/multer" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" capture="camera">
+        <input type="submit" value="multerForm">
+      </form>
+    </section>
+  </div>
+  <script src="./libs/init.js"></script>
+  <script src="./libs/demo.js"></script>
+</body>
+</html>

@@ -1,97 +1,4 @@
-function $ (selector) {
-  return document.querySelector(selector)
-}
-// init 
-window.URL = window.URL || window.webkitURL
-
-function newBlob (data, datatype) {
-  var blob
-  try {
-    blob = new Blob([data], { type: datatype })
-  } catch (e) {
-    window.BlobBuilder = window.BlobBuilder ||
-    window.WebKitBlobBuilder ||
-    window.MozBlobBuilder ||
-    window.MSBlobBuilder
-
-    if (e.name == 'TypeError' && window.BlobBuilder) {
-      var blobBuilder = new BlobBuilder()
-      blobBuilder.append(data)
-      blob = blobBuilder.getBlob(datatype)
-    } else if (e.name == 'InvalidStateError') {
-      blob = new Blob([data], { type: datatype })
-    }
-  }
-  return blob
-}
-
-function isCanvasBlank (canvas) {
-  var blank = document.createElement('canvas')
-  blank.width = canvas.width
-  blank.height = canvas.height
-
-  return canvas.toDataURL() == blank.toDataURL()
-}
-
-function newBlob (data, datatype) {
-  var out
-  try {
-    out = new Blob([data], { type: datatype })
-  } catch (e) {
-    window.BlobBuilder = window.BlobBuilder ||
-    window.WebKitBlobBuilder ||
-    window.MozBlobBuilder ||
-    window.MSBlobBuilder
-
-    if (e.name == 'TypeError' && window.BlobBuilder) {
-      var bb = new BlobBuilder()
-      bb.append(data)
-      out = bb.getBlob(datatype)
-    } else if (e.name == 'InvalidStateError') {
-      out = new Blob([data], { type: datatype })
-    }
-  }
-  return out
-}
-
-function dataURL2Blob (dataURI) {
-  var byteStr
-  var intArray
-  var ab
-  var i
-  var mimetype
-  var parts
-
-  parts = dataURI.split(',')
-
-  if (~parts[0].indexOf('base64')) {
-    byteStr = atob(parts[1])
-  } else {
-    byteStr = decodeURIComponent(parts[1])
-  }
-
-  ab = new ArrayBuffer(byteStr.length)
-  intArray = new Uint8Array(ab)
-
-  for (i = 0; i < byteStr.length; i++) {
-    intArray[i] = byteStr.charCodeAt(i)
-  }
-
-  mimetype = parts[0].split(':')[1].split(';')[0]
-
-  return new Blob([ab], {
-    type: mimetype
-  })
-}
-
-function string2ArrayBuffer (string) {
-  var bytes = Array.prototype.map.call(string, function (c) {
-    return c.charCodeAt(0) & 0xff
-  })
-  return new Uint8Array(bytes).buffer
-}
-
-(function () {
+;(function () {
   var file
   var fileType
   var url
@@ -100,6 +7,7 @@ function string2ArrayBuffer (string) {
   var contentType // 从 canvas.toDataURL 的结果中获取的 contentType
   var pureBase64ImageData // 不包含 /^data:image\/(.+);base64,/ 的 base64 字符串
   var binaryString // atob 转码后的 二进制文本 
+  var boundary = 'customFileboundary'
   var boundaryString // 构造为 multipart 的文本
 
   // file on change
@@ -113,7 +21,7 @@ function string2ArrayBuffer (string) {
 
   // get file
   J_GetImageFile.addEventListener('click', function () {
-    var name
+    var fileName
     file = J_File.files[0]
     fileName = file.name
     fileType = file.type || 'image/' + fileName.substr(fileName.lastIndexOf('.') + 1)
@@ -194,10 +102,10 @@ function string2ArrayBuffer (string) {
     J_SourceFileSize.innerText = file.size
     J_CompressedFileSize.innerText = compressedBlob.size
     J_Atob.removeAttribute('disabled')
-    
+
     if (compressedBlob.size > file.size) {
       // 文件压缩后，比原文件大
-      console.log(compressedBlob.size + ' > '  + file.size)
+      console.log(compressedBlob.size + ' > ' + file.size)
       return
     }
     compressSuccess = true
@@ -219,7 +127,6 @@ function string2ArrayBuffer (string) {
   })
 
   J_ConcatBinaryStirng.addEventListener('click', function () {
-    var boundary = 'customFileboundary'
     boundaryString = [
       '--' + boundary,
       'Content-Disposition: form-data; name="file"; filename="' + (file.name || 'blob') + '"',
@@ -234,6 +141,40 @@ function string2ArrayBuffer (string) {
 
   J_String2ArrayBuffer.addEventListener('click', function () {
     var stringBuffer = string2ArrayBuffer(boundaryString)
+
     J_ArrayBuffer.innerText = stringBuffer
+    J_XHR.removeAttribute('disabled')
+    J_XHRBlob.removeAttribute('disabled')
+  })
+
+  // use XMLHttpRequest send Array Buffer
+  J_XHR.addEventListener('click', function () {
+    var xhr = new XMLHttpRequest()
+
+    // xhr.open('POST', 'http://huafeitest.sdhoo.com/api/upload', true)
+    xhr.open('POST', 'http://localhost:8080/api/upload/multer', true)
+    xhr.withCredentials = true
+    xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary)
+    xhr.addEventListener('load', function () {
+      console.log(arguments)
+    })
+    xhr.send(boundaryString)
+  })
+
+  // use XMLHttpRequest & FormData send blob
+  J_XHRBlob.addEventListener('click', function () {
+    var fd = new FormData()
+    var xhr = new XMLHttpRequest()
+    var blobFile = dataURL2Blob(compressedImageDataURL)
+
+    fd.append('file', blobFile, file.name)
+
+    // xhr.open('POST', 'http://huafeitest.sdhoo.com/api/upload', true)
+    xhr.open('POST', 'http://localhost:8080/api/upload/multer', true)
+    xhr.withCredentials = true
+    xhr.addEventListener('load', function () {
+      console.log(arguments)
+    })
+    xhr.send(fd)
   })
 }())

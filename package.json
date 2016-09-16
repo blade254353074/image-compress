@@ -5,15 +5,33 @@
   "main": "index.js",
   "scripts": {
     "start": "browser-sync start -s --port 8080 -f \"./src,.index.html\" --no-ui",
+    "server": "cross-env NODE_ENV=development node server/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["image", "compress", "BrowserSide", "Android4.0"],
+  "keywords": [
+    "image",
+    "compress",
+    "BrowserSide",
+    "Android4.0"
+  ],
   "author": "SebastianBlade",
   "repository": {
     "url": "https://github.com/blade254353074/image-compress.git"
   },
   "license": "GNU",
   "devDependencies": {
-    "browser-sync": "^2.15.0"
+    "browser-sync": "^2.15.0",
+    "cross-env": "^2.0.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "file-type": "^3.8.0",
+    "log4js": "^0.6.38",
+    "multer": "^1.2.0",
+    "multiparty": "^4.1.2",
+    "read-chunk": "^2.0.0",
+    "shortid": "^2.2.6"
   }
 }

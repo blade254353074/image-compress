@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+var app = require('./app.js')
+var express = require('express')
+var http = require('http')
+var logger = require('log4js').getLogger('app')
+
+function normalizePort (val) {
+  var port = parseInt(val, 10)
+
+  if (isNaN(port)) {
+    return val
+  }
+
+  if (port >= 0) {
+    return port
+  }
+
+  return false
+}
+
+var port = normalizePort(process.env.PORT || 8080)
+var server = http.createServer(app)
+
+server
+  .listen(port)
+  .on('error', function onError (error) {
+    if (error.syscall !== 'listen') {
+      throw error
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port
+
+    switch (error.code) {
+      case 'EACCES':
+        logger.error(bind + ' requires elevated privileges')
+        process.exit(1)
+        break
+      case 'EADDRINUSE':
+        logger.error(bind + ' is already in use')
+        process.exit(1)
+        break
+      default:
+        throw error
+    }
+  })
+  .on('listening', function onListening () {
+    var addr = server.address()
+    var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port
+    logger.info('Listening on ' + bind)
+  })
