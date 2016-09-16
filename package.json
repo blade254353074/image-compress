@@ -18,7 +18,7 @@
   "repository": {
     "url": "https://github.com/blade254353074/image-compress.git"
   },
-  "license": "GNU",
+  "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.15.0",
     "cross-env": "^2.0.1"
