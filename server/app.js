@@ -15,6 +15,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // app.use(cookieParser())
 app.use(cors({
   // origin: 'http://localhost:8080',
+  origin: function (origin, callback) {
+    callback(null, true)
+  },
   credentials: true
 }))
 app.use(express.static(path.resolve(__dirname, '../src')))

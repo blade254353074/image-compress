@@ -9,6 +9,28 @@
   var binaryString // atob 转码后的 二进制文本 
   var boundary = 'customFileboundary'
   var boundaryString // 构造为 multipart 的文本
+  var arrayBuffer // 需要用 ajax 发送的 ArrayBuffer
+
+  function asyncClick (doms, i) {
+    setTimeout(function () {
+      if (i < doms.length) {
+        doms[i++].click()
+        asyncClick(doms, i)
+      }
+    }, 50)
+  }
+
+  function autoClick () {
+    asyncClick([
+      J_GetImageFile,
+      J_LoadImageByURL,
+      J_DrawImage,
+      J_CompressImage,
+      J_Atob,
+      J_ConcatBinaryStirng,
+      J_String2ArrayBuffer
+    ], 0)
+  }
 
   // file on change
   J_File.addEventListener('change', function (e) {
@@ -17,6 +39,7 @@
     } else {
       J_GetImageFile.setAttribute('disabled', true)
     }
+    autoClick()
   })
 
   // get file
@@ -102,6 +125,8 @@
     J_SourceFileSize.innerText = file.size
     J_CompressedFileSize.innerText = compressedBlob.size
     J_Atob.removeAttribute('disabled')
+    J_XHRBlobMultiparty.removeAttribute('disabled')
+    J_XHRBlobMulter.removeAttribute('disabled')
 
     if (compressedBlob.size > file.size) {
       // 文件压缩后，比原文件大
@@ -110,13 +135,14 @@
     }
     compressSuccess = true
   })
-
+  
   // atob
   J_Atob.addEventListener('click', function () {
     pureBase64ImageData = compressedImageDataURL.replace(/^data:(image\/.+);base64,/, function ($0, $1) {
       contentType = $1
       return ''
     })
+
     // atob
     binaryString = atob(pureBase64ImageData)
 
@@ -140,41 +166,66 @@
   })
 
   J_String2ArrayBuffer.addEventListener('click', function () {
-    var stringBuffer = string2ArrayBuffer(boundaryString)
+    arrayBuffer = string2ArrayBuffer(boundaryString)
 
-    J_ArrayBuffer.innerText = stringBuffer
-    J_XHR.removeAttribute('disabled')
-    J_XHRBlob.removeAttribute('disabled')
+    J_ArrayBuffer.innerText = arrayBuffer
+    J_XHRMultiparty.removeAttribute('disabled')
+    J_XHRMulter.removeAttribute('disabled')
   })
+  
+  function sendArrayBuffer (url) {
+    return function () {
+      var xhr = new XMLHttpRequest()
+      xhr.withCredentials = true
+      xhr.open('POST', url, true)
+      xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary)
+
+      xhr.addEventListener('load', function () {
+        if (
+          xhr.status >= 200 && xhr.status < 300 ||
+          xhr.status == 304
+        ) {
+          J_UploadResult_XHR.innerText = '--- SUCCESS ---\n' + JSON.stringify(JSON.parse(xhr.responseText), null, 2)
+        } else {
+          J_UploadResult_XHR.innerText =
+            '--- ERROR: ' + xhr.status + ' ---\n' + JSON.stringify(JSON.parse(xhr.responseText), null, 2)
+        }
+      })
+
+      xhr.send(arrayBuffer)
+    }
+  }
 
   // use XMLHttpRequest send Array Buffer
-  J_XHR.addEventListener('click', function () {
-    var xhr = new XMLHttpRequest()
+  J_XHRMultiparty.addEventListener('click', sendArrayBuffer('http://localhost:8080/api/upload/multiparty'))
+  J_XHRMulter.addEventListener('click', sendArrayBuffer('http://localhost:8080/api/upload/multer'))
 
-    // xhr.open('POST', 'http://huafeitest.sdhoo.com/api/upload', true)
-    xhr.open('POST', 'http://localhost:8080/api/upload/multer', true)
-    xhr.withCredentials = true
-    xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary)
-    xhr.addEventListener('load', function () {
-      console.log(arguments)
-    })
-    xhr.send(boundaryString)
-  })
+  function sendBlob (url) {
+    return function () {
+      var fd = new FormData()
+      var xhr = new XMLHttpRequest()
+      var blobFile = dataURL2Blob(compressedImageDataURL)
+
+      fd.append('file', blobFile, file.name)
+
+      xhr.open('POST', url, true)
+      xhr.withCredentials = true
+      xhr.addEventListener('load', function () {
+        if (
+          xhr.status >= 200 && xhr.status < 300 ||
+          xhr.status == 304
+        ) {
+          J_UploadResult_XHRBlob.innerText = '--- SUCCESS ---\n' + JSON.stringify(JSON.parse(xhr.responseText), null, 2)
+        } else {
+          J_UploadResult_XHRBlob.innerText =
+            '--- ERROR: ' + xhr.status + ' ---\n' + JSON.stringify(JSON.parse(xhr.responseText), null, 2)
+        }
+      })
+      xhr.send(fd)
+    }
+  }
 
   // use XMLHttpRequest & FormData send blob
-  J_XHRBlob.addEventListener('click', function () {
-    var fd = new FormData()
-    var xhr = new XMLHttpRequest()
-    var blobFile = dataURL2Blob(compressedImageDataURL)
-
-    fd.append('file', blobFile, file.name)
-
-    // xhr.open('POST', 'http://huafeitest.sdhoo.com/api/upload', true)
-    xhr.open('POST', 'http://localhost:8080/api/upload/multer', true)
-    xhr.withCredentials = true
-    xhr.addEventListener('load', function () {
-      console.log(arguments)
-    })
-    xhr.send(fd)
-  })
+  J_XHRBlobMultiparty.addEventListener('click', sendBlob('http://localhost:8080/api/upload/multiparty'))
+  J_XHRBlobMulter.addEventListener('click', sendBlob('http://localhost:8080/api/upload/multer'))
 }())

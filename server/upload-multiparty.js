@@ -41,11 +41,11 @@ function unlinkFile (filePath) {
 function fileQualify (filePath, formats) {
   // https://github.com/sindresorhus/file-type
   var buffer = readChunk.sync(filePath, 0, 262)
-  // var type = fileType(buffer)
-  // if (formats.indexOf(type && type.ext) === -1) {
-  //   unlinkFile(filePath)
-  //   throw new Error('Upload error, wrong file type，just accept jpg, jpeg, gif, png.')
-  // }
+  var type = fileType(buffer)
+  if (formats.indexOf(type && type.ext) === -1) {
+    unlinkFile(filePath)
+    throw new Error('Upload error, wrong file type，just accept jpg, jpeg, gif, png.')
+  }
 }
 
 module.exports = function uploadMultiparty (req, res, next) {
