@@ -22,6 +22,9 @@ h5 {
 img,
 canvas {
   max-width: 100%;
+}
+
+canvas {
   border: 1px solid #ccc;
 }
 

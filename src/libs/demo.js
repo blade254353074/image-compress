@@ -57,6 +57,40 @@
     J_LoadImageByFileReader.removeAttribute('disabled')
   })
 
+  // get file directly
+  J_GetLenaFile.addEventListener('click', function (e) {
+    var button
+
+    if (e.target && e.target.nodeName === 'BUTTON') {
+      var fileName
+      button = e.target
+      url = button.getAttribute('data-url')
+      fileName = url.substr(url.lastIndexOf('/') + 1)
+
+      getFile(url + '?t=' + (new Date()).valueOf(), function (err, res) {
+        if (err) {
+          return alert(err)
+        }
+        file = {
+          name: fileName,
+          size: res.contentLength,
+          type: res.contentType
+        }
+        fileType = res.contentType
+        J_ImageObject.innerText = [
+          'file.name: ' + fileName,
+          'file.type: ' + fileType,
+          'file.size: ' + file.size
+        ].join('\r\n')
+      })
+      J_Image.removeAttribute('src')
+      setTimeout(function () {
+        J_Image.src = url
+        J_ImageURL.innerText = url
+      }, 0)
+    }
+  })
+
   // image load
   J_Image.addEventListener('load', function () {
     J_DrawImage.removeAttribute('disabled')
@@ -75,8 +109,10 @@
     url = window.URL.createObjectURL(file)
 
     J_Image.removeAttribute('src')
-    J_Image.src = url
-    J_ImageURL.innerText = url
+    setTimeout(function () {
+      J_Image.src = url
+      J_ImageURL.innerText = url
+    }, 0)
   })
   // FileReader
   J_LoadImageByFileReader.addEventListener('click', function () {
@@ -124,6 +160,7 @@
     J_CompressedImageDataURL.innerText = compressedImageDataURL
     J_SourceFileSize.innerText = file.size
     J_CompressedFileSize.innerText = compressedBlob.size
+    J_CompressedImage.src = compressedImageDataURL
     J_Atob.removeAttribute('disabled')
     J_XHRBlobMultiparty.removeAttribute('disabled')
     J_XHRBlobMulter.removeAttribute('disabled')

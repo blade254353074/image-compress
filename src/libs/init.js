@@ -61,7 +61,7 @@ function dataURL2Blob (dataURI) {
 
   parts = dataURI.split(',')
 
-  parts[1] = parts[1].replace(/\s/g,'')
+  parts[1] = parts[1].replace(/\s/g, '')
 
   if (~parts[0].indexOf('base64')) {
     byteStr = atob(parts[1])
@@ -88,4 +88,22 @@ function string2ArrayBuffer (string) {
     return c.charCodeAt(0) & 0xff
   })
   return new Uint8Array(bytes).buffer
+}
+
+function getFile (url, callback) {
+  var obj = new XMLHttpRequest()
+  obj.open('HEAD', url, true)
+  obj.onreadystatechange = function () {
+    if (obj.readyState == 4) {
+      if (obj.status == 200) {
+        callback && callback(null, {
+          contentLength: obj.getResponseHeader('Content-Length'),
+          contentType: obj.getResponseHeader('Content-Type')
+        })
+      } else {
+        callback && callback(new Error('Load error'))
+      }
+    }
+  }
+  obj.send(null)
 }
