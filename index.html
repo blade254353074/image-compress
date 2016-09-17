@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="src">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="renderer" content="webkit">
   <title>Browser side image compression demo</title>
-  <link rel="stylesheet" href="./libs/demo.css">
+  <link rel="stylesheet" href="src/libs/demo.css">
 </head>
 <body>
   <div class="container">
@@ -22,9 +21,9 @@
       <button id="J_GetImageFile" disabled>GetImageFile</button>
       <h5>Or get lena_std file directly: </h5>
       <div id="J_GetLenaFile">
-        <button id="J_GetLenaJPG" data-url="imgs/lena_std.jpg">Get lena_std.jpg async</button>
-        <button id="J_GetLenaPNG" data-url="imgs/lena_std.png">Get lena_std.png async</button>
-        <button id="J_GetLenaGIF" data-url="imgs/lena_std.gif">Get lena_std.gif async</button>
+        <button id="J_GetLenaJPG" data-url="src/imgs/lena_std.jpg">Get lena_std.jpg async</button>
+        <button id="J_GetLenaPNG" data-url="src/imgs/lena_std.png">Get lena_std.png async</button>
+        <button id="J_GetLenaGIF" data-url="src/imgs/lena_std.gif">Get lena_std.gif async</button>
       </div>
     </section>
     <section>
@@ -138,7 +137,7 @@
       </form>
     </section>
   </div>
-  <script src="./libs/init.js"></script>
-  <script src="./libs/demo.js"></script>
+  <script src="src/libs/init.js"></script>
+  <script src="src/libs/demo.js"></script>
 </body>
 </html>
