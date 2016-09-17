@@ -114,7 +114,7 @@
     */
     var canvas = J_ImageCanvas
     var mimeType = fileType || 'image/png'
-    var quality = 30
+    var quality = J_CompressQuality.value
     var compressedBlob
 
     compressedImageDataURL = canvas.toDataURL(mimeType, quality / 100)
