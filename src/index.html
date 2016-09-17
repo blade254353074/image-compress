@@ -58,6 +58,8 @@
           CompressedImage:
           <img id="J_CompressedImage" alt="CompressedImage"> 
         </p>
+        <span>CompressionDuring: </span>
+        <span id="J_CompressDuring" class="single-line"></span>
         <div>
           <label for="J_CompressQuality">
             Quality: 
@@ -115,13 +117,13 @@
         <a href="https://github.com/blade254353074/image-compress" target="_blank" rel="noopener noreferrer">https://github.com/blade254353074/image-compress</a>
       </p>
       <h3>0x01. Send the arrayBuffer by XMLHttpRequest.(After step 7)</h3>
-      <p id="J_UploadResult_XHR"></p>
+      <pre id="J_UploadResult_XHR"></pre>
       <button id="J_XHRMultiparty" disabled>Send to multiparty</button>
       <button id="J_XHRMulter" disabled>Send to multer</button>
     </section>
     <section>
       <h3>0x02. Send the blob by XMLHttpRequest and FormData.(After step 4)</h3>
-      <p id="J_UploadResult_XHRBlob"></p>
+      <pre id="J_UploadResult_XHRBlob"></pre>
       <button id="J_XHRBlobMultiparty" disabled>Send to multiparty</button>
       <button id="J_XHRBlobMulter" disabled>Send to multer</button>
     </section>

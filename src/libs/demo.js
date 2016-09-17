@@ -157,6 +157,8 @@
     var mimeType = fileType || 'image/png'
     var quality = J_CompressQuality.value
     var compressedBlob
+    var startTime
+    var endTime
 
 
     J_MimeType.innerText = ''
@@ -165,7 +167,9 @@
     J_CompressedFileSize.innerText = ''
     J_CompressedImage.removeAttribute('src')
 
+    startTime = Date.now()
     compressedImageDataURL = canvas.toDataURL(mimeType, quality / 100)
+    endTime = Date.now()
     compressedBlob = dataURL2Blob(compressedImageDataURL)
 
     setTimeout(function () {
@@ -173,6 +177,7 @@
       J_CompressedImageDataURL.innerText = compressedImageDataURL
       J_SourceFileSize.innerText = file.size
       J_CompressedFileSize.innerText = compressedBlob.size
+      J_CompressDuring.innerText = endTime - startTime + 'ms'
       J_CompressedImage.src = compressedImageDataURL
       J_Atob.removeAttribute('disabled')
       J_XHRBlobMultiparty.removeAttribute('disabled')
@@ -189,7 +194,7 @@
   
   // atob
   J_Atob.addEventListener('click', function () {
-    // 不包含 /^data:image\/(.+);base64,/ 的 base64 字符串
+    // 不包含 /^data:(image\/.+);base64,/ 的 base64 字符串
     var pureBase64ImageData = compressedImageDataURL.replace(/^data:(image\/.+);base64,/, function ($0, $1) {
       contentType = $1
       return ''

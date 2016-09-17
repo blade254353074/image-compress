@@ -37,7 +37,7 @@ function dataURL2Blob (dataURI) {
   var intArray
   var ab
   var i
-  var mimeType
+  var mimetype
   var parts
 
   parts = dataURI.split(',')
@@ -56,11 +56,9 @@ function dataURL2Blob (dataURI) {
     intArray[i] = byteStr.charCodeAt(i)
   }
 
-  mimeType = parts[0].split(':')[1].split(';')[0]
+  mimetype = parts[0].split(':')[1].split(';')[0]
 
-  return new newBlob([ab], {
-    type: mimeType
-  })
+  return new newBlob(ab, mimetype)
 }
 
 function string2ArrayBuffer (string) {
