@@ -1,27 +1,6 @@
 // init
 window.URL = window.URL || window.webkitURL
 
-function newBlob (data, datatype) {
-  var blob
-  try {
-    blob = new Blob([data], { type: datatype })
-  } catch (e) {
-    window.BlobBuilder = window.BlobBuilder ||
-    window.WebKitBlobBuilder ||
-    window.MozBlobBuilder ||
-    window.MSBlobBuilder
-
-    if (e.name == 'TypeError' && window.BlobBuilder) {
-      var blobBuilder = new BlobBuilder()
-      blobBuilder.append(data)
-      blob = blobBuilder.getBlob(datatype)
-    } else if (e.name == 'InvalidStateError') {
-      blob = new Blob([data], { type: datatype })
-    }
-  }
-  return blob
-}
-
 function isCanvasBlank (canvas) {
   var blank = document.createElement('canvas')
   blank.width = canvas.width
@@ -46,6 +25,8 @@ function newBlob (data, datatype) {
       out = bb.getBlob(datatype)
     } else if (e.name == 'InvalidStateError') {
       out = new Blob([data], { type: datatype })
+    } else {
+      throw new Error('Your browser does not support Blob & BlobBuilder!')
     }
   }
   return out
@@ -56,11 +37,10 @@ function dataURL2Blob (dataURI) {
   var intArray
   var ab
   var i
-  var mimetype
+  var mimeType
   var parts
 
   parts = dataURI.split(',')
-
   parts[1] = parts[1].replace(/\s/g, '')
 
   if (~parts[0].indexOf('base64')) {
@@ -76,10 +56,10 @@ function dataURL2Blob (dataURI) {
     intArray[i] = byteStr.charCodeAt(i)
   }
 
-  mimetype = parts[0].split(':')[1].split(';')[0]
+  mimeType = parts[0].split(':')[1].split(';')[0]
 
-  return new Blob([ab], {
-    type: mimetype
+  return new newBlob([ab], {
+    type: mimeType
   })
 }
 

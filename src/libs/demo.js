@@ -5,7 +5,6 @@
   var compressedImageDataURL
   var compressSuccess = false
   var contentType // 从 canvas.toDataURL 的结果中获取的 contentType
-  var pureBase64ImageData // 不包含 /^data:image\/(.+);base64,/ 的 base64 字符串
   var binaryString // atob 转码后的 二进制文本 
   var boundary = 'customFileboundary'
   var boundaryString // 构造为 multipart 的文本
@@ -190,7 +189,8 @@
   
   // atob
   J_Atob.addEventListener('click', function () {
-    pureBase64ImageData = compressedImageDataURL.replace(/^data:(image\/.+);base64,/, function ($0, $1) {
+    // 不包含 /^data:image\/(.+);base64,/ 的 base64 字符串
+    var pureBase64ImageData = compressedImageDataURL.replace(/^data:(image\/.+);base64,/, function ($0, $1) {
       contentType = $1
       return ''
     })
