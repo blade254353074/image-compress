@@ -83,7 +83,13 @@
           'file.size: ' + file.size
         ].join('\r\n')
       })
+
+      // reset
+      J_ImageObject.innerText = ''
       J_Image.removeAttribute('src')
+      J_ImageCanvas.getContext('2d').clearRect(0, 0, J_ImageCanvas.width, J_ImageCanvas.height)
+      J_ImageCanvas.width = 300
+      J_ImageCanvas.height = 150
       setTimeout(function () {
         J_Image.src = url
         J_ImageURL.innerText = url
@@ -153,17 +159,26 @@
     var quality = J_CompressQuality.value
     var compressedBlob
 
+
+    J_MimeType.innerText = ''
+    J_CompressedImageDataURL.innerText = ''
+    J_SourceFileSize.innerText = ''
+    J_CompressedFileSize.innerText = ''
+    J_CompressedImage.removeAttribute('src')
+
     compressedImageDataURL = canvas.toDataURL(mimeType, quality / 100)
     compressedBlob = dataURL2Blob(compressedImageDataURL)
 
-    J_MimeType.innerText = mimeType
-    J_CompressedImageDataURL.innerText = compressedImageDataURL
-    J_SourceFileSize.innerText = file.size
-    J_CompressedFileSize.innerText = compressedBlob.size
-    J_CompressedImage.src = compressedImageDataURL
-    J_Atob.removeAttribute('disabled')
-    J_XHRBlobMultiparty.removeAttribute('disabled')
-    J_XHRBlobMulter.removeAttribute('disabled')
+    setTimeout(function () {
+      J_MimeType.innerText = mimeType
+      J_CompressedImageDataURL.innerText = compressedImageDataURL
+      J_SourceFileSize.innerText = file.size
+      J_CompressedFileSize.innerText = compressedBlob.size
+      J_CompressedImage.src = compressedImageDataURL
+      J_Atob.removeAttribute('disabled')
+      J_XHRBlobMultiparty.removeAttribute('disabled')
+      J_XHRBlobMulter.removeAttribute('disabled')
+    }, 0)
 
     if (compressedBlob.size > file.size) {
       // Compressed file size > Original file size
