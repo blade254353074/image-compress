@@ -3,6 +3,7 @@
   var fileType
   var url
   var compressedImageDataURL
+  var compressedImageBlob
   var compressSuccess = false
   var contentType // 从 canvas.toDataURL 的结果中获取的 contentType
   var binaryString // atob 转码后的 二进制文本 
@@ -156,7 +157,6 @@
     var canvas = J_ImageCanvas
     var mimeType = fileType || 'image/png'
     var quality = J_CompressQuality.value
-    var compressedBlob
     var startTime
     var endTime
 
@@ -170,13 +170,13 @@
     startTime = Date.now()
     compressedImageDataURL = canvas.toDataURL(mimeType, quality / 100)
     endTime = Date.now()
-    compressedBlob = dataURL2Blob(compressedImageDataURL)
+    compressedImageBlob = dataURL2Blob(compressedImageDataURL)
 
     setTimeout(function () {
       J_MimeType.innerText = mimeType
       J_CompressedImageDataURL.innerText = compressedImageDataURL
       J_SourceFileSize.innerText = file.size
-      J_CompressedFileSize.innerText = compressedBlob.size
+      J_CompressedFileSize.innerText = compressedImageBlob.size
       J_CompressDuring.innerText = endTime - startTime + 'ms'
       J_CompressedImage.src = compressedImageDataURL
       J_Atob.removeAttribute('disabled')
@@ -184,9 +184,9 @@
       J_XHRBlobMulter.removeAttribute('disabled')
     }, 0)
 
-    if (compressedBlob.size > file.size) {
+    if (compressedImageBlob.size > file.size) {
       // Compressed file size > Original file size
-      console.log(compressedBlob.size + ' > ' + file.size)
+      console.log(compressedImageBlob.size + ' > ' + file.size)
       return
     }
     compressSuccess = true
@@ -235,8 +235,9 @@
       var button = this
       var buttonText = this.innerText
       var xhr = new XMLHttpRequest()
-      xhr.withCredentials = true
+      
       xhr.open('POST', url, true)
+      xhr.withCredentials = true
       xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary)
 
       xhr.upload.addEventListener('progress', function (e) {
@@ -275,7 +276,7 @@
       var buttonText = this.innerText
       var formData = new FormData()
       var xhr = new XMLHttpRequest()
-      var blobFile = dataURL2Blob(compressedImageDataURL)
+      var blobFile = compressedImageBlob
 
       formData.append('file', blobFile, file.name)
 
