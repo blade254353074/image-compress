@@ -6,7 +6,7 @@
   var compressedImageBlob
   var compressSuccess = false
   var contentType // 从 canvas.toDataURL 的结果中获取的 contentType
-  var binaryString // atob 转码后的 二进制文本 
+  var binaryString // atob 转码后的 二进制文本
   var boundary = 'customFileboundary'
   var boundaryString // 构造为 multipart 的文本
   var arrayBuffer // 需要用 ajax 发送的 ArrayBuffer
@@ -191,7 +191,7 @@
     }
     compressSuccess = true
   })
-  
+
   // atob
   J_Atob.addEventListener('click', function () {
     // 不包含 /^data:(image\/.+);base64,/ 的 base64 字符串
@@ -229,13 +229,13 @@
     J_XHRMultiparty.removeAttribute('disabled')
     J_XHRMulter.removeAttribute('disabled')
   })
-  
+
   function sendArrayBuffer (url) {
     return function () {
       var button = this
       var buttonText = this.innerText
       var xhr = new XMLHttpRequest()
-      
+
       xhr.open('POST', url, true)
       xhr.withCredentials = true
       xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary)
@@ -303,7 +303,7 @@
         button.innerText = buttonText
         button.removeAttribute('disabled')
       })
-      
+
       button.setAttribute('disabled', 'true')
       xhr.send(formData)
     }
